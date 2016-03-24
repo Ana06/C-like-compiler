@@ -1,6 +1,6 @@
 # C-like compiler
 
-A C-like language compiler written in Java that generates assembly code for the p-machine. This project was done during a university course (Language processorsS) and finished in July 2015. Most comments are in Spanish.
+A C-like language compiler written in Java that generates assembly code for the p-machine. This project was done during a university course (Language processors) and finished in July 2015. Most comments are in Spanish.
 
 
 ## Lexical Analysis
