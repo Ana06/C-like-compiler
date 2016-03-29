@@ -1,0 +1,373 @@
+package sintactico;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.*;
+import lexico.AnalizadorLexico;
+
+import lenguaje.*;
+import lenguaje.VariableParametro.*;
+import lenguaje.ExpresionSimple.*;
+import lenguaje.Instruccion.*;
+import lenguaje.Tipo.*;
+import lenguaje.Tipo.TipoStruct.ClaseAux;
+import java.util.*;
+import exc.GestionExcepciones;
+
+parser code {: 
+  public boolean syntaxErrors;
+
+
+  AnalizadorLexico alex;
+ 
+  public AnalizadorSintactico(AnalizadorLexico alex, ComplexSymbolFactory sf) {
+    super(alex,sf);
+    alex = alex;
+  }
+  
+  /*
+  public void report_error(String m, Object info){
+	try {
+		GestionExcepciones.gestionaError(m);
+	} catch (IOException e) {
+		System.out.println(m + "hola");
+		done_parsing();
+	}
+  }
+  /*
+  public void syntax_error(Symbol cur_token){
+	System.err.println("Syntax error");
+  }
+  */
+:}; 
+
+terminal String ID;
+terminal Boolean CONSTBOOL;
+terminal Integer CONSTENT, EQUALWITHOPSUM, EQUALWITHOPMUL, INCREMENT ,
+				OPRELATIONAL, OPSUM, OPMUL, TYPEPRIM;
+terminal    AND, BRACKETOP, BRACKETCL, CODE, COMMA, CONST,
+			ELSE, END, ARROW, GLOBALS,IF, EQUAL,BRACEOP, BRACECL,
+			STRUCT, NO, OR, POP, PCL, SEMI, 
+			RETURN, SKIP, VOID,WHILE,FUN; 
+
+non terminal Programa programa;
+non terminal LinkedList<ListaVariables> listaDeclaracionVariables;
+non terminal ListaDecVarFun listaDeclaracionVarFun;
+non terminal ListaVariables listaVariables;
+non terminal Hashtable<String,ClaseAux> listaStruct;
+non terminal Variable variable;
+non terminal LinkedList<Integer> listaDimensiones;
+non terminal Tipo tipo, tipoSimple;
+non terminal TipoStruct tipoStruct;
+non terminal LinkedList<DeclaracionFuncion> listaDeclaracionFunciones;
+non terminal DeclaracionFuncion declaracionFuncion;
+non terminal Parametros parametros;
+non terminal LinkedList<Parametro> listaParametros;
+non terminal Parametro parametro;
+non terminal Instruccion instruccion;
+non terminal InstCompuesta instCompuesta;
+non terminal InstExpresion instExpresion;
+non terminal InstSeleccion instSeleccion;
+non terminal InstIteracion instIteracion;
+non terminal InstRetorno instRetorno;
+non terminal LinkedList<Instruccion> listaInst;
+non terminal Expresion expresion;
+non terminal LinkedList<ExpresionSimple> expresionArray;
+non terminal LinkedList<ExpresionSimple> listaExpresionesArray;
+non terminal ExpresionSimple expresionSimple,expresionConj,expresionUnariaORelacional,expresionRelacional, 
+	expresionAritmetica, termino, modificable, inmodificable, llamada, constante,factor;
+non terminal LinkedList<ExpresionSimple> listaArgumentos;
+non terminal LinkedList<ExpresionSimple> listaModificable;
+
+
+
+
+ 
+programa ::= 
+	GLOBALS listaDeclaracionVariables:dv CODE listaDeclaracionFunciones:df
+	{: RESULT = new Programa(dv,df); :}
+	|error
+	 ;
+	 
+listaDeclaracionVariables ::= 
+	listaDeclaracionVariables:dv tipo:t listaVariables:iv SEMI
+	{: dv.add(iv.tipar(t)); RESULT = dv; :}
+	| 
+    {: RESULT =  new LinkedList<ListaVariables>(); :}
+	;
+	
+listaDeclaracionVarFun ::= 
+	listaDeclaracionVarFun:dv tipo:t listaVariables:iv SEMI
+	{: dv.addListaVar(iv.tipar(t)); RESULT = dv; :}
+	| 
+	listaDeclaracionVarFun:dv declaracionFuncion:df
+	{: dv.addFun(df); RESULT = dv; :}
+	| 
+    {: RESULT =  new ListaDecVarFun(); :}
+	;
+	
+listaVariables ::= 
+	listaVariables:iv COMMA variable:v 
+	{: iv.add(v); RESULT = iv; :}
+	| variable:v
+    {: ListaVariables aux = new ListaVariables(); aux.add(v); RESULT = aux; :}
+	| error
+    ;
+	
+variable ::= 
+	ID:i
+	{: RESULT = new Variable(new Identificador(ixleft,i,ixright)); :}
+	| ID:i EQUAL expresionSimple:e
+	{: RESULT = new Variable(new Identificador(ixleft,i,ixright), e); :}
+	| ID:i listaDimensiones:ld
+	{: RESULT = new Variable(new Identificador(ixleft,i,ixright), ld); :}
+	| ID:i listaDimensiones:ld EQUAL expresionArray:ea
+	{: RESULT = new Variable(new Identificador(ixleft,i,ixright), ld, ea); :}
+	;
+
+listaDimensiones ::= 
+	listaDimensiones:ld BRACKETOP CONSTENT:c BRACKETCL
+	{: ld.add(c); RESULT = ld; :}
+	| BRACKETOP CONSTENT:c BRACKETCL
+    {: LinkedList<Integer> aux = new LinkedList<Integer>(); aux.add(c); RESULT = aux; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: dimension list badly written at line " + exleft.getLine() + ", column " + exleft.getColumn() + "\n"); :} 
+    ;
+	
+tipo ::= 
+	CONST tipoSimple:t 
+	{: t.constante(true); RESULT = t; :}
+	| tipoSimple:t 
+	{: RESULT = t; :}
+	;
+
+tipoSimple ::= 
+	TYPEPRIM:t
+	{: RESULT = new Tipo(t); :}
+	| tipoStruct:aux STRUCT BRACEOP listaStruct:lv BRACECL
+	{: aux.tomaLista(lv); RESULT = aux; :}
+	;
+
+tipoStruct ::=
+	{: RESULT = new TipoStruct(); :}
+	;
+listaStruct ::= 
+	listaStruct:ls tipo:t ID:id SEMI
+	{: ls.put(id,new ClaseAux(t)); RESULT = ls; :}
+	| tipo:t ID:id SEMI
+    {: Hashtable<String,ClaseAux> aux = new Hashtable<String,ClaseAux>(); aux.put(id,new ClaseAux(t)); RESULT = aux; :}
+	| error
+    ;
+	
+listaDeclaracionFunciones ::= 
+	listaDeclaracionFunciones:lf declaracionFuncion:f
+	{: lf.add(f); RESULT = lf; :}
+	| declaracionFuncion:f
+	{: LinkedList<DeclaracionFuncion> aux = new LinkedList<DeclaracionFuncion>(); aux.add(f); RESULT = aux; :}
+	;
+	
+declaracionFuncion ::= 
+	FUN tipoSimple:t ID:i POP parametros:p PCL BRACEOP listaDeclaracionVarFun:l listaInst:li instRetorno:ii BRACECL
+	{: RESULT = new DeclaracionFuncion(t, p, new Identificador(ixleft,i,ixright), new InstCompuesta(l,li),ii); :}
+	|FUN VOID ID:i POP parametros:p PCL instCompuesta:in
+	{: RESULT = new DeclaracionFuncion(p, new Identificador(ixleft,i,ixright), in); :}
+	;
+	
+parametros ::= 
+	listaParametros:lp 
+	{: RESULT = new Parametros(lp); :}
+	| 
+	{: RESULT = new Parametros(); :}
+	;
+
+listaParametros ::= 
+	listaParametros:lp COMMA parametro:p 
+	{: lp.add(p); RESULT = lp; :}
+	| parametro:p
+	{: LinkedList<Parametro> aux = new LinkedList<Parametro>(); aux.add(p); RESULT = aux; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: parameter list badly written at line " + exleft.getLine() + ", column " + exleft.getColumn() + "\n");   :}
+	;
+	
+parametro ::= 
+	tipo:t ID:i 
+	{: RESULT = new Parametro(new Identificador(ixleft,i,ixright),t);:}
+	|tipo:t ID:i listaDimensiones:ld 
+	{: RESULT = new Parametro(new Identificador(ixleft,i,ixright),t,ld);:}
+	;
+	
+
+	
+instruccion ::=
+	instCompuesta:ic
+	{: RESULT = ic; :}
+	| instExpresion:ie
+	{: RESULT = ie; :}
+	| instSeleccion:is 
+	{: RESULT = is; :}
+	| instIteracion:ii
+	{: RESULT = ii; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: invalid statement at line " + exleft.getLine() +",column " + exleft.getColumn() + "\n");   :}
+	;
+
+instCompuesta ::= 
+	BRACEOP listaDeclaracionVarFun:ld listaInst:li BRACECL 
+	{: RESULT = new InstCompuesta(ld, li); :}
+	;
+
+listaInst ::= 
+	listaInst:li instruccion:i 
+	{: li.add(i); RESULT = li; :}
+	| 
+	{: RESULT = new LinkedList<Instruccion>(); :}
+	; 
+
+instExpresion ::=
+	expresion:e SEMI
+	{: RESULT = new InstExpresion(e); :}
+	;
+	
+instSeleccion ::=
+	IF POP expresionSimple:e PCL instruccion:i END
+	{: RESULT = new InstSeleccion(e,i); :}
+	| IF POP expresionSimple:e PCL instruccion:i1 ELSE instruccion:i2 END
+	{: RESULT = new InstSeleccion(e, i1, i2); :}
+	;
+	
+instIteracion ::=
+	WHILE POP expresionSimple:e PCL instruccion:i END
+	{: RESULT = new InstIteracion(e,i); :}
+	;
+	
+instRetorno ::=
+	RETURN expresionSimple:e SEMI
+	{: RESULT = new InstRetorno(e); :}
+	;
+	
+expresion ::=
+	modificable:m EQUAL:eq expresionSimple:e
+	{: RESULT = new Expresion(m, e, eqxleft); :}
+	| modificable:m EQUALWITHOPSUM:iop expresionAritmetica:e
+	{: Modificable m2=((Modificable)m).copia(); m2.parteDerecha(true); RESULT = new Expresion(m, new ExpresionAritmetica(m2,iop,e), iopxleft); :}
+	| modificable:m EQUALWITHOPMUL:iop expresionAritmetica:e
+	{: Modificable m2=((Modificable)m).copia(); m2.parteDerecha(true); RESULT = new Expresion(m, new Termino(m2,iop,e), iopxleft); :}
+	| modificable:m INCREMENT:i
+	{: RESULT = new Expresion(m, i, ixleft); :}
+	;
+	
+expresionArray ::=
+	BRACEOP listaExpresionesArray:lv BRACECL
+	{: RESULT = lv; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: array initialization list was badly written at line " + exleft.getLine() +",column " + exleft.getColumn() + "\n");   :}
+	;
+	
+listaExpresionesArray ::=
+	listaExpresionesArray:le COMMA expresionSimple:e
+	{: le.add(e); RESULT = le; :}
+	| expresionSimple:e
+	{: LinkedList<ExpresionSimple> aux = new LinkedList<ExpresionSimple>(); aux.add(e); RESULT = aux; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: array initialization list was badly written at line " + exleft.getLine() +",column " + exleft.getColumn() + "\n");   :}
+	;
+
+expresionSimple ::= 
+	expresionSimple:es OR expresionConj:ec
+	{: RESULT =  new ExpresionSimple(es, ec); :}
+	| expresionConj:ec 
+	{: RESULT = ec;  :}
+	;
+	
+expresionConj ::=
+	expresionConj:c AND expresionUnariaORelacional:eur
+	{: RESULT = new ExpresionConj(c, eur); :}
+	| expresionUnariaORelacional:eur
+	{: RESULT = eur;  :}
+	;
+	
+expresionUnariaORelacional ::=
+	NO expresionUnariaORelacional:eur
+	{: RESULT = new ExpresionUnariaORelacional(eur,  eurxleft); :}
+	| expresionRelacional:er
+	{: RESULT = er;   :}
+	;
+	
+expresionRelacional ::=
+	expresionAritmetica:ea1 OPRELATIONAL:op expresionAritmetica:ea2
+	{: RESULT = new ExpresionRelacional(ea1, op, ea2, opxleft); :}
+	| expresionAritmetica:ea
+	{: RESULT = ea; :}
+	;
+
+expresionAritmetica ::=
+	expresionAritmetica:ea OPSUM:op termino:t
+	{: RESULT = new ExpresionAritmetica(ea, op, t, opxleft); :}
+	| termino:t
+	{: RESULT = t; :}
+	;
+
+termino ::=
+	termino:t OPMUL:op factor:eu
+	{: RESULT = new Termino(t, op, eu);  :}
+	| factor:eu
+	{: RESULT = eu; :}
+	;
+	
+factor ::=
+	inmodificable:i
+	{: RESULT = i; :}
+	| modificable:m
+	{: m.parteDerecha(true); RESULT = m; :}
+	;
+	
+modificable ::=
+	ID:i
+	{: RESULT = new Modificable(new Identificador(ixleft,i,ixright)); :}
+	| ID:i listaModificable:e
+	{: RESULT = new Modificable(new Identificador(ixleft,i,ixright), e); :}
+	| ID:i ARROW modificable:m
+	{: RESULT = new Modificable(new Identificador(ixleft,i,ixright), m); :}
+	| ID:i listaModificable:e ARROW modificable:m
+	{: RESULT = new Modificable(new Identificador(ixleft,i,ixright), e, m); :}
+	;
+	
+inmodificable ::=
+	POP expresionSimple:e PCL
+	{: RESULT = e; :}
+	| llamada:l
+	{: RESULT = l; :}
+	| constante:c
+	{: RESULT = c; :}
+	;
+	
+llamada ::=
+	ID:i POP listaArgumentos:l PCL
+	{: RESULT = new Llamada(new Identificador(ixleft,i,ixright), l); :}
+	;
+	
+listaArgumentos ::= 
+	listaArgumentos:la COMMA expresionSimple:e
+	{: la.add(e); RESULT = la; :}
+	| expresionSimple:e
+	{: LinkedList<ExpresionSimple> aux = new LinkedList<ExpresionSimple>(); aux.add(e); RESULT = aux; :}
+	|
+	{: RESULT = new LinkedList<ExpresionSimple>(); :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: invalid argument list at line " + exleft.getLine() +",column " + exleft.getColumn() + "\n");   :}
+	;
+
+listaModificable ::= 
+	listaModificable:ld BRACKETOP expresionAritmetica:c BRACKETCL
+	{: ld.add(c); RESULT = ld; :}
+	| BRACKETOP expresionAritmetica:c BRACKETCL
+    {: LinkedList<ExpresionSimple> aux = new LinkedList<ExpresionSimple>(); aux.add(c); RESULT = aux; :}
+	| error:e
+	{: GestionExcepciones.gestionaError("Error: invalid access to array at line " + exleft.getLine() +",column " + exleft.getColumn() + "\n");   :}
+    ;
+	
+constante ::= 
+	CONSTENT:e
+	{: RESULT = new Constante(e); :}
+	| CONSTBOOL:b
+	{: RESULT = new Constante(b); :}
+	;
