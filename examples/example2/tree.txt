@@ -1,0 +1,13 @@
+		Programa
+			Lista inicializacion
+					v
+						Int
+			FuncionVoid
+				Parametros
+				InstruccionCompuesta
+						a
+							Struct
+					InstruccionAsignacion
+						Expresion
+						InstruccionAsignacion
+							Expresion

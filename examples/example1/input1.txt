@@ -1,0 +1,21 @@
+globales
+codigo
+	fun int main(){
+		int a=376; ~~Input~~
+		int b; ~~Output~~
+		fun int imagenEspecular(int num){ ~~Función anidada que calcula la imagen especular~~
+			int res; ~~Variable en la que se va guardando la imagen especular del número~~
+			res = num % 10;
+			num = num / 10;
+			while(num > 0){
+				res = res*10 + num%10;
+				num /= 10;
+			}
+			end
+			return res;
+		}
+		b=imagenEspecular(a);
+		return b;
+	}
+
+

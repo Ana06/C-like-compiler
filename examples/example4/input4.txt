@@ -1,0 +1,13 @@
+globales
+int a =3;
+codigo
+	fun int main(){
+		const int b = 5;
+		bool c = true;
+		b=a; ~~Asignación de variable constante~~
+		if(a + a){ ~~ a+a es de tipo int ~~
+			a=c; ~~Asignamos un booleano a un entero~~
+		}
+		end
+		return f;  ~~f no está declarada en ningún sitio~~
+	}

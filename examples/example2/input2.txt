@@ -1,0 +1,16 @@
+globales
+int v=3;
+codigo
+	fun void main(){ ~~Contiene una matriz de structs anidados~~
+		struct{
+			int a;
+			struct {
+				bool a;
+				int b;
+			} b;
+		} a[2][2];
+		a[0][v - 3]->b->a = true;
+		a[0][0]->a=v;
+	}
+
+

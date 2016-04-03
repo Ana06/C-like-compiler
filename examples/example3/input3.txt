@@ -1,0 +1,8 @@
+globales
+int a =3;
+codigo
+	fun int main(){
+		int ñ = 5; ~~Error léxico~~
+		bool c = true ~~Error sintáctico, no se reconoce la inicialización pues falta ;~~
+		return a;
+	}

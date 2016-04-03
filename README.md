@@ -70,6 +70,25 @@ After the compilation process finishes, if there are no errors the resultant cod
 you would like to create a tree.txt file with a tree version of the code and/or a more readable version of the generated code using tags for branching.
 
 
+## Examples
+
+### Example 1
+
+The main function has a nested function, which calculates the mirror image of an integer given, declared inside it. The main function calls the nested function with an input value a, initialized to 376, and then returns the output of the function. 
+
+
+### Example 2
+
+Declare a matrix with nested structs and access to their fields.
+
+### Example 3
+
+Code with lexical and syntactic errors.
+
+
+### Example 4
+
+Code with errors.
 
 
 ## Authors
