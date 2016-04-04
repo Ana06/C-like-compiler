@@ -1,0 +1,20 @@
+		Programa
+			Lista inicializacion
+					a
+						Bool
+					b
+						Bool
+			FuncionInt
+				Parametros
+						a
+							Int
+				InstruccionCompuesta
+				InstruccionRetorno
+			FuncionInt
+				Parametros
+				InstruccionCompuesta
+						a
+							Int
+					InstruccionAsignacion
+						Expresion
+					InstruccionRetorno

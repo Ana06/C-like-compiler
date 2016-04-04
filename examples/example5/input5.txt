@@ -1,0 +1,18 @@
+globales
+int a =3;
+codigo
+	fun int main(){
+		int a = 5;
+		if (a==5)  ~~Coge la variable declarada en main~~
+		 {
+		  {
+		   { int a;
+		   	 a = 1;  ~~Nueva variable~~
+		   }
+		   a += 1; ~~Variable de main~~
+		  }
+		  a += 1; ~~Variable de main~~
+		 }
+		end
+		return a;
+	}

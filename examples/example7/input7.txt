@@ -1,0 +1,11 @@
+globales
+	bool a,b;
+codigo
+	fun int c(bool a){
+		return 1;
+	}
+	fun int main(){
+		int a;
+		a = 5;
+		return 77 + c(a); ~~Llama a la función c con a local (entero)~~
+	}
