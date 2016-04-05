@@ -105,7 +105,9 @@ Error due to incompatible types.
 Recursive program to compute the factorial.
 
 
+## Report
 
+**report.pdf** is a detailed report of the project in Spanish.
 
 
 ## Authors
@@ -116,4 +118,4 @@ This project was developed by Ana María Martínez Gómez and Víctor Adolfo Gal
 
 ## Licence
 
-Code published under MIT License (see [LICENSE](LICENSE))
+Code published under MIT License (see [LICENSE](LICENSE)).
