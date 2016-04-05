@@ -76,7 +76,6 @@ you would like to create a tree.txt file with a tree version of the code and/or 
 
 The main function has a nested function, which calculates the mirror image of an integer given, declared inside it. The main function calls the nested function with an input value a, initialized to 376, and then returns the output of the function. 
 
-
 ### Example 2
 
 Declare a matrix with nested structs and access to their fields.
@@ -85,10 +84,28 @@ Declare a matrix with nested structs and access to their fields.
 
 Code with lexical and syntactic errors.
 
-
 ### Example 4
 
 Code with errors.
+
+### Example 5
+
+Tricky code in which the same identifier is used at different scopes.
+
+### Example 6
+
+Code in which the local variable is used instead of the global one.
+
+### Example 7
+
+Error due to incompatible types.
+
+### Example 8
+
+Recursive program to compute the factorial.
+
+
+
 
 
 ## Authors

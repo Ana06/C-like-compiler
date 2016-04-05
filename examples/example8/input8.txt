@@ -1,0 +1,13 @@
+globales
+	int a = 4;
+codigo
+	fun int factorial(int a){
+		int res = 0; ~~Almacena el resultado~~
+		if (a>1) { res = a*factorial(a - 1); } ~~Caso recursivo~~
+		else { res = 1;} ~~Caso base~~
+		end
+		return res;
+	}
+	fun int main(){
+		return factorial(a);
+	}

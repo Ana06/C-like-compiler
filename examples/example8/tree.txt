@@ -1,0 +1,24 @@
+		Programa
+			Lista inicializacion
+					a
+						Int
+			FuncionInt
+				Parametros
+						a
+							Int
+				InstruccionCompuesta
+						res
+							Int
+					InstruccionSeleccionIF
+						InstruccionCompuesta
+							InstruccionAsignacion
+								Expresion
+							InstruccionSeleccionELSE
+								InstruccionCompuesta
+									InstruccionAsignacion
+										Expresion
+								InstruccionRetorno
+							FuncionInt
+								Parametros
+								InstruccionCompuesta
+								InstruccionRetorno

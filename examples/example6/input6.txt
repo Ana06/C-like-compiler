@@ -1,0 +1,11 @@
+globales
+	bool a,b;
+codigo
+	fun int c(int a){
+		return a+1;
+	}
+	fun int main(){
+		int a;
+		a = 5;
+		return 77 + c(a); ~~Utiliza el a local en lugar de la global~~
+	}
