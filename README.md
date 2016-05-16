@@ -2,6 +2,28 @@
 
 A C-like language compiler written in Java that generates assembly code for the p-machine. This project was done during a university course (Language processors) and finished in July 2015. Most comments are in Spanish.
 
+Feautures of our language:
+
+* Declaration of simple variables and matrix with an arbitrary number of dimensions.
+* Nested blocks.
+* Predefined, custom and witout name types.
+* Types comprobation.
+* Infix, prefix and posfix operands.
+* Advanced operands: `+=`, `-=`, `*=`, `/=`, `%=`, `++`, and `--`.
+* Implementation of the mod oerand (`%`), not avaible in the P-machine.
+* Assignment instruction, even for arrays elements.
+* If with and without else and while. All of them introduce a new scope.
+* Errors are reported including the row and the column. This is done for all kind of errors: lexical, syntactic and semantic errors.
+* Functions and methods with any number of params of primitive type. Overloading is not allowed.
+* The option to continue the compilation after finding an error.
+* Global variables.
+* Const modifier to use for constant variables.
+* Indexes correction checked in ejecution time.
+* The main function can be choosen.
+* Nested functions.
+* The option to generate the code for the P-machine with labels for a more legible code.
+* The syntactic tree it is generated and saved in a `.txt`.
+
 
 ## Lexical Analysis
 
