@@ -1,6 +1,6 @@
 # C-like compiler
 
-A C-like language compiler written in Java that generates assembly code for the p-machine. This project was done during a university course (Language processors) and finished in July 2015. Most comments are in Spanish.
+A C-like language compiler written in Java that generates assembly code for the P-machine. This project was done during a university course (Language processors) and finished in July 2015. Most comments are in Spanish.
 
 Feautures of our language:
 
@@ -96,7 +96,7 @@ you would like to create a tree.txt file with a tree version of the code and/or 
 
 ### Example 1
 
-The main function has a nested function, which calculates the mirror image of an integer given, declared inside it. The main function calls the nested function with an input value a, initialized to 376, and then returns the output of the function. 
+The main function has a nested function, which calculates the mirror image of an integer given, declared inside it. The main function calls the nested function with an input value a, initialized to 376, and then returns the output of the function.
 
 ### Example 2
 
@@ -134,10 +134,10 @@ Recursive program to compute the factorial.
 
 ## Authors
 
-This project was developed by Ana María Martínez Gómez and Víctor Adolfo Gallego Alcalá.
+This project was developed by [Ana María Martínez Gómez](https://github.com/Ana06) and [Víctor Adolfo Gallego Alcalá](https://github.com/vicgalle), except the P-machine which was developed by our teacher [Ricardo Peña](http://dalila.sip.ucm.es/~ricardo/).
 
 
 
 ## Licence
 
-Code published under MIT License (see [LICENSE](LICENSE)).
+Code published under MIT License (see [LICENSE](compiler-code/LICENSE)), except the content of the P-machine folder which has copyright and belongs to [Ricardo Peña](http://dalila.sip.ucm.es/~ricardo/).

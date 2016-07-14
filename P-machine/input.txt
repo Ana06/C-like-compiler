@@ -1,0 +1,47 @@
+
+
+
+{ 
+   . pequeño programa-P  
+
+   . generado a mano por Ricardo Peña, 3 de junio,2014
+
+   . ejecutado con éxito el 6 de junio, 2014  
+}
+
+{ Pueden usarse los comentarios de bloque para numerar las instrucciones }
+
+                  \\ inicializamos las variables 5, 6 y 7
+{0}   ssp 10;
+{1}   ldc 20;
+{2}   sro 5;
+{3}   ldc 30;
+{4}   sro 6;  
+{5}   ldc 40;
+{6}   sro 7;
+                  \\ comienza expresión aritmética
+{7}   ldc 5;       
+
+{8}   ldc 6; 
+{9}   ind;
+{10}  ldc 6;
+{11}  ind;
+{12}  ldc 7;
+{13}  ind  
+          ;       \\ puede haber blancos/fin-de-línea entre la operación y el ';'
+{14}  mul  ;
+{15}  add;
+{16}  dec -8;
+{17}  ldc 10;
+{18}  ixa 9;
+{19}  sto; 
+                  \\ comienza expresión lógica
+{20}  ldc false;     
+{21}  ldc true;   \\ nótese que ldc puede usarse con enteros y booleanos
+{22}  or ;  
+{23}  ldc -1; 
+
+                  \\ la última instrucción ejecutable debe ser stp (stop)
+     
+{23}  stp;
+

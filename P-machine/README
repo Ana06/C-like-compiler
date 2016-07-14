@@ -1,0 +1,19 @@
+Para ejecutar la máquina-P:
+
+. o bien generar un ejecutable 'maquinaP' con el compilador GHC
+
+. o bien ejecutar el intérprete de Haskell:
+  > ghci Main.hs
+
+En el primer caso, ejecutar:
+  > maquinaP input.txt
+
+
+En el segundo, escribir en la linea de comandos de GHCI:
+  > :main input.txt
+
+
+Los mensajes de error y el estado final de la máquina se obtienen en el 
+standard output
+
+
